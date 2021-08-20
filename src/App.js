@@ -1,25 +1,40 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect, useReducer } from "react";
+import "./App.css";
+
+function reducerFN(state, action) {
+  switch (action.type) {
+    case "TOGGLE":
+      return { vari: !state.vari };
+    default:
+      return state;
+  }
+}
 
 function App() {
+  const [emailState, dispatchEmail] = useReducer(reducerFN, {
+    vari: true,
+  });
+  const [passwordState, dispatchPassword] = useReducer(reducerFN, {
+    vari: true,
+  });
+  const [formState, dispatchForm] = useReducer(reducerFN, {
+    vari: true,
+  });
+  const toggleHandler = function () {
+    dispatchEmail({ type: "TOGGLE" }); // toggles emailState
+  };
+  
+  //$ The code in here executes after the email state gets changed (post button press)
+  useEffect(() => {
+    dispatchPassword({ type: "TOGGLE" }) // toggle from true -> false
+    console.log("passwordState in useEffect scope:", passwordState.vari); // change occurs immediately
+  }, [emailState.vari]);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <h1>Toggle state</h1>
+      <button onClick={toggleHandler}>email state changer</button>
     </div>
   );
 }
-
 export default App;
+
